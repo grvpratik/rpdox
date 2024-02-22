@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rethink_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import { NextUIProviders } from "@/providers/next-ui";
+import { AuthProvider } from "@/providers/next-auth";
 
 const rethink = Rethink_Sans({ subsets: ["latin"] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={rethink.className}>
-				<NextUIProviders>{children}</NextUIProviders>
+				<AuthProvider>
+					<NextUIProviders>{children}</NextUIProviders>
+				</AuthProvider>
 			</body>
 		</html>
 	);
