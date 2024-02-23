@@ -1,8 +1,8 @@
 import { AuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+
 import { connect } from "@/utils/connect";
 import User from "@/database/models/user.model";
-import { redirect } from "next/navigation";
 
 export const authOptions: AuthOptions = {
 	providers: [
@@ -13,13 +13,13 @@ export const authOptions: AuthOptions = {
 	],
 
 	callbacks: {
-		async signIn({ account, profile, user}:any) {
+		async signIn({ account, profile, user }: any) {
 			try {
-				console.log(profile, "profile");
-				console.log(account);
-				console.log(user)
-				
+				console.log("before connection ");
 				await connect();
+				// console.log(profile, "profile");
+				// console.log(account);
+				// console.log(user)
 
 				// Check if user already exists
 				const userExists = await User.findOne({ email: profile.email });
@@ -41,13 +41,13 @@ export const authOptions: AuthOptions = {
 			}
 		},
 		async jwt({ token, user }) {
+			console.log({ ...token, ...user }, "jwt");
 			// Merge token and user data
 			return { ...token, ...user };
 		},
 		async session({ session, user }) {
-			console.log(user,"user")
 			try {
-				console.log(session,"session")
+				await connect();
 				// Retrieve user id from MongoDB and add it to session
 				const sessionUser = await User.findOne({
 					email: session.user.email,

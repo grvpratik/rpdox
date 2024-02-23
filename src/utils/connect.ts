@@ -17,7 +17,10 @@ if (!cached) {
 }
 
 export const connect = async () => {
-	if (cached.conn) return cached.conn;
+	if (cached.conn) {
+		console.log("🚀 Using cached connection");
+		return cached.conn;
+	}
 
 	if (!MONGODB_URL) throw new Error("Missing MONGODB_URL");
 
@@ -25,7 +28,6 @@ export const connect = async () => {
 		cached.promise ||
 		mongoose.connect(MONGODB_URL, {
 			dbName: "temp",
-			bufferCommands: false,
 		});
 
 	cached.conn = await cached.promise;
